@@ -3,7 +3,7 @@ import serial
 import time
 
 # -------------------------- Setting --------------------------
-SERIAL_PORT = "COM3"  # Find your Arduino serial port (e.g., "COM3" on Windows or "/dev/ttyACM0" on Linux)
+SERIAL_PORT = "COM6"  # Find your Arduino serial port (e.g., "COM3" on Windows or "/dev/ttyACM0" on Linux)
 BAUD_RATE = 115200      # the braud rate must match the Arduino setting
 JOYSTICK_DEAD_ZONE = 500  # controller joystick dead zone threshold
 # --------------------------------------------------------------------------
@@ -34,7 +34,7 @@ for i in range(pygame.joystick.get_count()):
         break
 
 if not joystick:
-    print("No Xbox controller detected. Please connect one and try again.\(MacOs needs download driver\)")
+    print("No Xbox controller detected. Please connect one and try again.(MacOs needs download driver)")
     pygame.quit()
     exit()
 
@@ -73,9 +73,12 @@ try:
         ser.write(data.encode('utf-8'))
         
         # 打印调试信息（可选，注释后可提高效率）
-        # print(f"发送：{data.strip()}")
+        print(f"发送：{data.strip()}")
+        response = ser.readline().decode().strip()
+        if response:
+            print("Arduino 回显：", response)
         
-        time.sleep(0.03)  # 控制发送频率（约30Hz，避免串口拥堵）
+        time.sleep(0.01)  # 控制发送频率（约30Hz，避免串口拥堵）
         
 except KeyboardInterrupt:
     print("\n退出程序...")
